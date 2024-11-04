@@ -59,7 +59,7 @@ INSERT INTO usuario (
     'Marineuza Siriliano',
     '2003-03-12',
     'marineuza@email.com',
-    SHA1('senha123')
+    SHA1('Senha123')
 ), (
     'Setembrino Trocatapas',
     '1998-12-14',

@@ -24,9 +24,6 @@ SELECT u_id, u_nome, u_email
 FROM usuario
 WHERE u_status != 'del';
 
------------------------------------------------------------------
- -- TABELA TRECO
-
 -- Lista todos os trecos do "Joca" (id = 1)
 SELECT * FROM treco
 WHERE t_usuario = '1';
