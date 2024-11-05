@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/_template.css">
     <link rel="shortcut icon" href="/static/img/favicon.png">
+    {# Interpola a variável 'titulo' no <title></title> do site #}
     <title>{{ titulo }}</title>
 </head>
 
@@ -31,7 +32,8 @@
         </nav>
 
         <main>
-            {% block conteudo %}{% endblock %}sandra,vanessa,frisson
+            {# O conteúdo de todas as páginas do site abrem no bloco 'content' abaixo #}
+            {% block conteudo %}{% endblock %}
         </main>
 
         <footer>
