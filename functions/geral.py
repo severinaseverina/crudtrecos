@@ -54,8 +54,9 @@ def gerar_senha(tamanho=8):
      - letras minúsculas
      - números
      - caracteres especiais
-    :param tamanho: tamanho desejado da senha (mínimo 8)
-    :return: senha gerada
+     - 8 ou mais caracteres
+    :param tamanho: tamanho desejado da senha (padrão é 8)
+    :return: string com a senha gerada
     """
     if tamanho < 8:
         raise ValueError("O tamanho da senha deve ser pelo menos 8 caracteres")
@@ -84,6 +85,3 @@ def gerar_senha(tamanho=8):
     random.shuffle(senha)
 
     return ''.join(senha)
-
-
-print('\n\n\n', gerar_senha(), '\n\n\n')
