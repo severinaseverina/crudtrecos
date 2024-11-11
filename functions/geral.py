@@ -85,3 +85,6 @@ def gerar_senha(tamanho=8):
     random.shuffle(senha)
 
     return ''.join(senha)
+
+# Teste de mesa
+# print('\n\n\n', gerar_senha(), '\n\n\n')

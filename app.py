@@ -2,7 +2,7 @@
 from flask import Flask, g, make_response, redirect, render_template, request, url_for
 from flask_mysqldb import MySQL
 import json
-from functions.geral import calcular_idade, datetime_para_string, remove_prefixo
+from functions.geral import calcular_idade, datetime_para_string, gerar_senha, remove_prefixo
 
 # Cria um aplicativo Flask chamado "app"
 app = Flask(__name__)
@@ -253,25 +253,65 @@ def cadastro():
 @app.route('/novasenha', methods=['GET', 'POST'])  # Pedido de senha de usuário
 def novasenha():
 
+    novasenha = ''
+    erro = False
+
     # Verifica se o usuário está logado → Pelo cookie
     if g.usuario != '':
         # Se o usuário está logado
         # Redireciona para a página inicial
         return redirect(url_for('index'))
-    
-    # Pesquisa pelo email e senha informados, no banco de dados
 
-    # Se o usuário existe
+    # Se o formulário foi enviado
+    if request.method == 'POST':
 
-    # Gera uma nova senha
+        # Obtém dados preenchidos
+        form = dict(request.form)
 
-    # Salva a nova senha no banco de dados
+        # Teste de mesa
+        # print('\n\n\nFORM:', form, '\n\n\n')
 
-    # Exibe a nova senha para o usuário
+        # Pesquisa pelo email e nascimento informados, no banco de dados
+        sql = '''
+            SELECT u_id 
+            FROM usuario
+            WHERE u_email = %s 
+                AND u_nascimento = %s
+                AND u_status = 'on'
+        '''
+        cur = mysql.connection.cursor()
+        cur.execute(sql, (form['email'], form['nascimento'],))
+        row = cur.fetchone()
+        cur.close()
+
+        # Teste de mesa
+        print('\n\n\nDB:', row, '\n\n\n')
+
+        # Se o usuário existe
+        if row == None:
+
+            erro = True
+
+        else:
+            # Gera uma nova senha
+            novasenha = gerar_senha()
+
+            # Salva a nova senha no banco de dados
+            sql = '''
+                UPDATE usuario
+                SET u_senha = SHA1(%s)
+                WHERE u_id = %s
+            '''
+            cur = mysql.connection.cursor()
+            cur.execute(sql, (novasenha, row['u_id'],))
+            mysql.connection.commit()
+            cur.close()
 
     # Dados, variáveis e valores a serem passados para o template HTML
     pagina = {
-        'titulo': 'CRUDTrecos - Nova Senha'
+        'titulo': 'CRUDTrecos - Nova Senha',
+        'erro': erro,
+        'novasenha': novasenha,
     }
 
     return render_template('novasenha.html', **pagina)
